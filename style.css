@@ -1,0 +1,116 @@
+#archive {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+#archive img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+:root {
+    --bg: #fafafa;
+    --text: #1a1a1a;
+    --muted: #666;
+    --border: #e0e0e0;
+    --accent: #1a1a1a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 2rem 1.5rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+#archive {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Shared block card look */
+.block {
+    margin: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    break-inside: avoid;
+}
+
+.block img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.block figcaption {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+}
+
+/* Attachment (PDF/file) blocks */
+.block-attachment .attachment-link {
+    display: block;
+    padding: 0.8rem;
+    font-size: 0.9rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.block-attachment .attachment-link:hover {
+    text-decoration: underline;
+}
+
+/* Link blocks */
+.block-link .link-block {
+    display: block;
+    padding: 0.8rem;
+    font-size: 0.9rem;
+    color: var(--accent);
+    text-decoration: none;
+    word-break: break-word;
+}
+
+.block-link .link-block:hover {
+    text-decoration: underline;
+}
+
+/* Text blocks */
+.block-text .text-block {
+    padding: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.block-text .text-block p:first-child {
+    margin-top: 0;
+}
+
+.block-text .text-block p:last-child {
+    margin-bottom: 0;
+}
+
+/* Loading / empty states */
+#archive:has(> :only-child):not(:has(.block)) {
+    display: block;
+    text-align: center;
+    color: var(--muted);
+    padding: 3rem 0;
+}
