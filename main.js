@@ -1,9 +1,41 @@
-const CHANNEL_SLUG = 'april-s-living-archive';
+// COLOR CHANGE
+const colors = [
+    '#FF0055',
+    '#FF0099',
+    '#FF00FF',
+    '#CC00FF',
+    '#6600FF',
+    '#3300FF',
+    '#0055FF',
+    '#00AAFF',
+    '#00FFFF',
+    '#00FFCC',
+    '#00FF66',
+    '#00FF00',
+    '#66FF00',
+    '#CCFF00',
+    '#FFFF00',
+    '#FFCC00',
+    '#FF6600',
+    '#FF3300',
+    '#FF0033',
+    '#FF0088'
+];
 
-// Are.na's real API is v2, and the channel endpoint itself returns
-// the "contents" array — there's no separate /contents route.
+const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+document.body.style.color = randomColor;
+
+
+document.querySelectorAll('a').forEach(link => {
+    link.style.color = randomColor;
+});
+document.body.style.color = randomColor;
+
+// CONNECTING ARE.NA
+const CHANNEL_SLUG = 'april-s-living-archive';
 const API_URL = `https://api.are.na/v2/channels/${CHANNEL_SLUG}`;
-const PER_PAGE = 100; // max allowed per page
+const PER_PAGE = 100;
 
 async function getArenaContent() {
     let allBlocks = [];
@@ -19,9 +51,6 @@ async function getArenaContent() {
             }
 
             const data = await response.json();
-
-            // data.contents holds the blocks (data.data was the wrong key,
-            // and only existed for the nonexistent /contents endpoint anyway)
             allBlocks = allBlocks.concat(data.contents || []);
 
             totalPages = data.total_pages || 1;
@@ -36,30 +65,40 @@ async function getArenaContent() {
 }
 
 function sortChronologically(blocks) {
-    // connected_at = when the block was added to this channel
     return blocks.slice().sort((a, b) => {
-        const dateB = new Date(a.connected_at || a.created_at);
-        const dateA = new Date(b.connected_at || b.created_at);
-        return dateA - dateB;
+        const dateA = new Date(a.connected_at);
+        const dateB = new Date(b.connected_at);
+        return dateB - dateA;
     });
 }
-
 async function displayArchive() {
     const archive = document.getElementById('archive');
-    archive.innerHTML = 'Loading…';
+    const lastUpdated = document.getElementById('last-updated');
+
 
     const blocks = await getArenaContent();
-    const sorted = sortChronologically(blocks);
 
-    archive.innerHTML = '';
-
-    if (sorted.length === 0) {
+    if (blocks.length === 0) {
         archive.textContent = 'No blocks found (or the channel could not be reached).';
         return;
     }
 
+    const sorted = sortChronologically(blocks);
+
+    const latestBlock = sorted[0];
+    const latestDate = new Date(latestBlock.connected_at);
+
+    lastUpdated.textContent = latestDate.toLocaleString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    });
+
     sorted.forEach(block => {
-        // Only display image blocks
         if (block.class === 'Image' && block.image) {
             const figure = document.createElement('figure');
 
