@@ -1,3 +1,36 @@
+// COLOR CHANGE
+const colors = [
+    '#FF0055',
+    '#FF0099',
+    '#FF00FF',
+    '#CC00FF',
+    '#6600FF',
+    '#3300FF',
+    '#0055FF',
+    '#00AAFF',
+    '#00FFFF',
+    '#00FFCC',
+    '#00FF66',
+    '#00FF00',
+    '#66FF00',
+    '#CCFF00',
+    '#FFFF00',
+    '#FFCC00',
+    '#FF6600',
+    '#FF3300',
+    '#FF0033',
+    '#FF0088'
+];
+
+const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+document.body.style.color = randomColor;
+
+
+document.querySelectorAll('a').forEach(link => {
+    link.style.color = randomColor;
+});
+document.body.style.color = randomColor;
 
 // CONNECTING ARE.NA
 const CHANNEL_SLUG = 'april-s-living-archive';
