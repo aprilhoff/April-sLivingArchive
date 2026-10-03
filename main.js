@@ -1,19 +1,22 @@
+const API_URL =
+    'https://api.are.na/v2/channels/april-s-living-archive';
 
-
-// ================================
-// GET ARE.NA CONTENT
-// ================================
+const PER_PAGE = 100;
 
 async function getArenaContent() {
 
+    const url = `${API_URL}?page=1&per=${PER_PAGE}`;
+
+    console.log('Fetching:', url);
+
     try {
 
-        const response = await fetch(
-            `${API_URL}?page=1&per=${PER_PAGE}`
-        );
+        const response = await fetch(url);
+
+        console.log('Are.na response:', response.status);
 
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+            throw new Error(`Are.na HTTP ${response.status}`);
         }
 
         const data = await response.json();
@@ -30,11 +33,6 @@ async function getArenaContent() {
 
     }
 }
-
-
-// ================================
-// SORT NEWEST → OLDEST
-// ================================
 
 function sortChronologically(blocks) {
 
@@ -54,9 +52,7 @@ function sortChronologically(blocks) {
 }
 
 
-// ================================
-// DISPLAY ARCHIVE
-// ================================
+
 
 async function displayArchive() {
 
@@ -74,7 +70,7 @@ async function displayArchive() {
         await getArenaContent();
 
 
-    // REMOVE LOADING TEXT
+
     archive.innerHTML = '';
 
 
@@ -90,11 +86,6 @@ async function displayArchive() {
 
     const sorted =
         sortChronologically(blocks);
-
-
-    // ================================
-    // LAST UPDATED
-    // ================================
 
     const latestBlock =
         sorted[0];
@@ -117,9 +108,7 @@ async function displayArchive() {
         });
 
 
-    // ================================
-    // IMAGES
-    // ================================
+
 
     sorted.forEach(block => {
 
@@ -141,7 +130,6 @@ async function displayArchive() {
             img.alt =
                 block.title || '';
 
-            // Keep lazy loading
             img.loading = 'lazy';
 
             figure.appendChild(img);
@@ -168,8 +156,5 @@ async function displayArchive() {
 }
 
 
-// ================================
-// START
-// ================================
 
 displayArchive();
