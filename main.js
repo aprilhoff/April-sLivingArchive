@@ -1,7 +1,7 @@
 const API_URL =
     'https://api.are.na/v2/channels/april-s-living-archive';
 
-
+const PER_PAGE = 300;
 
 
 // GET ARE.NA CONTENT
