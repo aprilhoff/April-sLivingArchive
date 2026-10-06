@@ -1,39 +1,63 @@
 const API_URL =
     'https://api.are.na/v2/channels/april-s-living-archive';
 
-const PER_PAGE = 300;
+const PER_PAGE = 100;
 
 
-// GET ARE.NA CONTENT
+
+// GET ARE.NA CONTENT (ALL PAGES)
 async function getArenaContent() {
 
-    const url = `${API_URL}?page=1&per=${PER_PAGE}`;
-
-    console.log('Fetching:', url);
+    const allBlocks = [];
+    let page = 1;
+    let totalLength = Infinity;
 
     try {
 
-        const response = await fetch(url);
+        while (allBlocks.length < totalLength) {
 
-        console.log('Are.na response:', response.status);
+            const url = `${API_URL}?page=${page}&per=${PER_PAGE}`;
 
-        if (!response.ok) {
-            throw new Error(`Are.na HTTP ${response.status}`);
+            console.log('Fetching:', url);
+
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(`Are.na HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // channel's total block count
+            if (typeof data.length === 'number') {
+                totalLength = data.length;
+            }
+
+            const contents = data.contents || [];
+
+            // nothing more to fetch
+            if (contents.length === 0) break;
+
+            allBlocks.push(...contents);
+
+            // last page was partial, so we're done
+            if (contents.length < PER_PAGE) break;
+
+            page++;
+
         }
-
-        const data = await response.json();
-
-        console.log('Are.na data:', data);
-
-        return data.contents || [];
 
     } catch (error) {
 
         console.error('Are.na fetch failed:', error);
 
-        return [];
+        // return whatever we managed to load
+        return allBlocks;
 
     }
+
+    return allBlocks;
+
 }
 
 
