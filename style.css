@@ -63,3 +63,21 @@ body {
     font-size: 0.85rem;
     text-align: center;
 }
+
+@media (max-width: 768px) {
+    body {
+        grid-template-columns: minmax(0, 1fr); /* single column */
+    }
+
+    #archive {
+        grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 cards per row */
+        gap: 6px;
+        padding: 6px;
+    }
+}
+
+@media (max-width: 400px) {
+    #archive {
+        grid-template-columns: minmax(0, 1fr); /* 1 card per row on very small phones */
+    }
+}
